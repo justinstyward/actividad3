@@ -1,0 +1,239 @@
+use('Liga_Internacional')
+
+
+//Comandos de la cuarta actividad 
+
+md C:\data\repl\n1
+md C:\data\repl\n2
+md C:\data\repl\n3
+md C:\data\repl\n4
+md C:\data\repl\n5
+md C:\data\repl\n6
+
+md C:\data\config\n1
+md C:\data\config\n2
+md C:\data\config\n3
+
+mongod --port 27017 --dbpath \data\repl\n1 --replSet rs0
+mongod --port 27018 --dbpath \data\repl\n2 --replSet rs0
+mongod --port 27019 --dbpath \data\repl\n3 --replSet rs0
+
+strat mongo --port 27022 --dbpath \data\config\n1
+strat mongo --port 27023 --dbpath \data\config\n2
+strat mongo --port 27024 --dbpath \data\config\n3
+
+
+//Comando de la tercera actividad:
+db = (new Mongo("localhost:20006")).getDB("Biblioteca") 
+for (i= 0; i < 800000; i++) {
+    db.Autores.insert({author : "author" +i, post_title : "Blog Post by Author "
+    +i, date: new Date() });
+}
+
+db.Editoriales.insertMany([
+    {id_editorial:9, nombre: 'McGraw Hill', pais: 'USA', grupo: 'McCallun y Cia.'},
+    {id_editorial:10, nombre:'Addison Wesley', pais: 'USA', grupo: 'McCallun yCia.'},
+    {id_editorial:11,nombre:'La oveja negra', pais: 'Colombia', grupo: 'Mejía y Cia'},
+    {id_editorial:12, nombre: 'Aguilar', pais: 'México', grupo: 'Aguilar y Cia'},
+    {id_editorial:13, nombre: 'Alfaguara', pais: 'Colombia', grupo: 'GrupoEmpresarial'}
+]);
+
+
+db.MisLibros.insertMany([
+    {id_libro:1, nombre:'El Aleph', autor: 'Jorge Luis Borges', editoriales: ['Planeta', 'Siglo XXI']},
+    {id_libro:2, nombre:'El Quijote de la Mancha', autor: 'Miguel de Cervantes Saavedra', editoriales: ['Planeta']},
+    {id_libro:3, nombre: 'Cien años de soledad', autor: 'Gabriel García Márquez',editoriales: ['Oveja Negra']},
+    {id_libro:4, nombre: 'Crimen y castigo', autor: 'Fiodor Dostoyeski', editoriales: ['Addison Wesley ']}
+]);
+
+db.Autores.count()
+db.Editoriales.count()
+db.MisLibros.count()
+
+shard1 = new Mongo("localhost:20000")
+shard1DB = shard1.getDB("Biblioteca")
+shard1DB.Autores.count()
+
+shard2= new Mongo("localhost:20001")
+shard2DB = shard2.getDB("Biblioteca")
+shard2DB.Autores.count()
+
+shard3= new Mongo("localhost:20002")
+shard3DB = shard3.getDB("Biblioteca")
+shard3DB.Autores.count()
+
+shard1 = new Mongo("localhost:20006")
+sh.status()
+
+sh.enableSharding("Biblioteca")
+db.Autores.ensureIndex({author : 1})
+
+sh.shardCollection("Biblioteca.Autores", {author: 1})
+
+
+
+
+
+
+
+
+//db.Cinema.insertMany([[{"Cine Colombia": "Tunal", "Peliculas": [{"Pelicula": "Jhon wik 4"}, {"Pelicula": "Screan 6"}, {"Pelicula": "65"}]}]])
+
+
+
+//db.Arbitros.insertMany([{"Nombre": "Romualdo Arppi Filho", "Pais": "Brasil"}, {"Nombre": "Michel Vautrot", "Pais": "Francia"}])
+
+//db.ResultadoEncuentro.insertMany([{"Ganador": [ObjectId("6417c8d4b506a4ac78a7698a")], "JugadorElegido": [ObjectId("6417d225b9de2b6d59dd21f6")]}])
+//db.Partidos.insertMany([{"Fecha": "19/03/2023", "Hora": "10:00 Pm", "Estadio": "El campin", "Selecciones": [ObjectId("6417c8d4b506a4ac78a7698a"), ObjectId("6417c8d4b506a4ac78a76990")], "Arbitro": [ObjectId("6417d5140d0510b7ae320f19")]}])
+
+/*
+db.Jugadores.insertMany([
+    {"Nombre": "Álvaro David Montero Perales", "Edad": "27 años", "Posicion": "Portero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Camilo Vargas", "Edad": "34 años", "Posicion": "Portero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Stefan Medina", "Edad": "30 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jhon Lucumí", "Edad": "24 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Carlos Cuesta", "Edad": "24 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Santiago Arias", "Edad": "31 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Deiver Machado", "Edad": "29 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Alexis Rafael Pérez Fontanilla", "Edad": "28 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Johan Mojica", "Edad": "30 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Daniel Muñoz", "Edad": "26 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Davinson Sánchez", "Edad": "26 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jorge Carrascal", "Edad": "24 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Diego Luis Valoyes Ruíz", "Edad": "26 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Gustavo Cuéllar", "Edad": "30 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "James Rodríguez", "Edad": "31 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jhon Arias", "Edad": "25 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Luis Díaz", "Edad": "26 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Mateus Uribe", "Edad": "31 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Kevin Duvan Castaño Gil", "Edad": "22 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jefferson Lerma", "Edad": "28 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Juan Fernando Quintero", "Edad": "30 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Dylan Felipe Borrero Caicedo", "Edad": "21 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Juan David Mosquera López,", "Edad": "20 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Radamel Falcao,", "Edad": "37 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Duván Zapata,", "Edad": "31 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jhon Durán,", "Edad": "19 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jhon Córdoba,", "Edad": "29 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Rafael Santos Borré,", "Edad": "27 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]}
+])
+*/
+/*db.Jugadores.insertMany([
+    {"Nombre": "Moisés Ramírez", "Posicion": "Portero", "Pias donde juega": "Independiente del Valle", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Alexander Domínguez", "Posicion": "Portero", "Pias donde juega": "LDU Quito", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Hernán Galíndez", "Posicion": "Portero", "Pias donde juega": "Aucas", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Piero Hincapié", "Posicion": "Defensor", "Pias donde juega": "Bayer Leverkusen (Alemania)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Robert Arboleda", "Posicion": "Defensor", "Pias donde juega": "São Paulo (Brasil)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Pervis Estupiñán", "Posicion": "Defensor", "Pias donde juega": "Brighton (Inglaterra)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Angelo Preciado", "Posicion": "Defensor", "Pias donde juega": "KRC Genk (Bélgica)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Jackson Porozo", "Posicion": "Defensor", "Pias donde juega": "Troyes (Francia)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Xavier Arreaga", "Posicion": "Defensor", "Pias donde juega": "Seattle Sounders (Estados Unidos)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Diego Palacios", "Posicion": "Defensor", "Pias donde juega": "LAFC (Estados Unidos)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Félix Torres", "Posicion": "Defensor", "Pias donde juega": "Santos (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "William Pacho", "Posicion": "Defensor", "Pias donde juega": "Royal Amberes (Bélgica)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Carlos Gruezo", "Posicion": "Mediocampista", "Pias donde juega": "Augsburgo (Alemania)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "José Cifuentes", "Posicion": "Mediocampista", "Pias donde juega": "LAFC (Estados Unidos)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Alan Franco", "Posicion": "Mediocampista", "Pias donde juega": "Talleres (Argentina)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Moisés Caicedo", "Posicion": "Mediocampista", "Pias donde juega": "Brighton (Inglaterra)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Ángel Mena", "Posicion": "Mediocampista", "Pias donde juega": "León (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Jeremy Sarmiento", "Posicion": "Mediocampista", "Pias donde juega": "Brighton (Inglaterra)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Jhegson Méndez", "Posicion": "Mediocampista", "Pias donde juega": "LAFC (Estados Unidos)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Ayrton Preciado", "Posicion": "Mediocampista", "Pias donde juega": "Santos (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Gonzalo Plata", "Posicion": "Mediocampista", "Pias donde juega": "Valladolid (España)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Romario Ibarra", "Posicion": "Mediocampista", "Pias donde juega": "Pachuca (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Djorkaeff Reasco", "Posicion": "Delantero", "Pias donde juega": "Newell's (Argentina)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Kevin Rodríguez", "Posicion": "Delantero", "Pias donde juega": "Imbabura", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Michael Estrada", "Posicion": "Delantero", "Pias donde juega": "Cruz Azul (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Enner Valencia", "Posicion": "Delantero", "Pias donde juega": "Fenerbahce (Turquía)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]}
+])
+
+
+/*db.Equipos.insertMany([
+    {"Pais": "Brasil", "puntos": "1840,77"},
+{"Pais": "Argentina", "puntos": "1838,38"},
+{"Pais": "Francia", "puntos": "1823,39"},
+{"Pais": "Bélgica", "puntos": "1781,30"},
+{"Pais": "Inglaterra", "puntos": "1774,19"},
+{"Pais": "Países Bajos", "puntos": "1740,92"},
+{"Pais": "Croacia", "puntos": "1727,62"},
+{"Pais": "Italia", "puntos": "1723,56"},
+{"Pais": "Portugal", "puntos": "1702,54"},
+{"Pais": "España", "puntos": "1692,71"},
+{"Pais": "Marruecos", "puntos": "1672,35"},
+{"Pais": "Suiza", "puntos": "1655,02"},
+{"Pais": "Estados Unidos", "puntos": "1652,74"},
+{"Pais": "Alemania", "puntos": "1646,91"},
+{"Pais": "México", "puntos": "1635,78"},
+{"Pais": "Uruguay", "puntos": "1627,45"},
+{"Pais": "Colombia", "puntos": "1612,78"},
+{"Pais": "Dinamarca", "puntos": "1608,11"},
+{"Pais": "Senegal", "puntos": "1603,98"},
+{"Pais": "Japón", "puntos": "1593,08"},
+{"Pais": "Perú", "puntos": "1564,3"},
+{"Pais": "Chile", "puntos": "1506,91"},
+{"Pais": "Ecuador", "puntos": "1477,32"},
+{"Pais": "Paraguay", "puntos": "1445,06"},
+{"Pais": "Venezuela", "puntos": "1406,1"},
+{"Pais": "Bolivia", "puntos": "1294,96"}
+])*/
+/*
+{"Nombre": "Moisés Ramírez", "Posicion": "Portero", "Pias donde juega": "Independiente del Valle", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Alexander Domínguez", "Posicion": "Portero", "Pias donde juega": "LDU Quito", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Hernán Galíndez", "Posicion": "Portero", "Pias donde juega": "Aucas", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Piero Hincapié", "Posicion": "Defensor", "Pias donde juega": "Bayer Leverkusen (Alemania)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Robert Arboleda", "Posicion": "Defensor", "Pias donde juega": "São Paulo (Brasil)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Pervis Estupiñán", "Posicion": "Defensor", "Pias donde juega": "Brighton (Inglaterra)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Angelo Preciado", "Posicion": "Defensor", "Pias donde juega": "KRC Genk (Bélgica)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Jackson Porozo", "Posicion": "Defensor", "Pias donde juega": "Troyes (Francia)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Xavier Arreaga", "Posicion": "Defensor", "Pias donde juega": "Seattle Sounders (Estados Unidos)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Diego Palacios", "Posicion": "Defensor", "Pias donde juega": "LAFC (Estados Unidos)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Félix Torres", "Posicion": "Defensor", "Pias donde juega": "Santos (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "William Pacho", "Posicion": "Defensor", "Pias donde juega": "Royal Amberes (Bélgica)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Carlos Gruezo", "Posicion": "Mediocampista", "Pias donde juega": "Augsburgo (Alemania)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "José Cifuentes", "Posicion": "Mediocampista", "Pias donde juega": "LAFC (Estados Unidos)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Alan Franco", "Posicion": "Mediocampista", "Pias donde juega": "Talleres (Argentina)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Moisés Caicedo", "Posicion": "Mediocampista", "Pias donde juega": "Brighton (Inglaterra)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Ángel Mena", "Posicion": "Mediocampista", "Pias donde juega": "León (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Jeremy Sarmiento", "Posicion": "Mediocampista", "Pias donde juega": "Brighton (Inglaterra)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Jhegson Méndez", "Posicion": "Mediocampista", "Pias donde juega": "LAFC (Estados Unidos)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Ayrton Preciado", "Posicion": "Mediocampista", "Pias donde juega": "Santos (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Gonzalo Plata", "Posicion": "Mediocampista", "Pias donde juega": "Valladolid (España)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Romario Ibarra", "Posicion": "Mediocampista", "Pias donde juega": "Pachuca (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Djorkaeff Reasco", "Posicion": "Delantero", "Pias donde juega": "Newell's (Argentina)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Kevin Rodríguez", "Posicion": "Delantero", "Pias donde juega": "Imbabura", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Michael Estrada", "Posicion": "Delantero", "Pias donde juega": "Cruz Azul (México)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]},
+{"Nombre": "Enner Valencia", "Posicion": "Delantero", "Pias donde juega": "Fenerbahce (Turquía)", "Equipo": [ObjectId("6417c8d4b506a4ac78a76990")]}
+*/
+
+/*
+{"Nombre": "Álvaro David Montero Perales", "Edad": "27 años", "Posicion": "Portero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Camilo Vargas", "Edad": "34 años", "Posicion": "Portero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Stefan Medina", "Edad": "30 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jhon Lucumí", "Edad": "24 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Carlos Cuesta", "Edad": "24 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Santiago Arias", "Edad": "31 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Deiver Machado", "Edad": "29 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Alexis Rafael Pérez Fontanilla", "Edad": "28 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Johan Mojica", "Edad": "30 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Daniel Muñoz", "Edad": "26 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Davinson Sánchez", "Edad": "26 años", "Posicion": "Defensa", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Jorge Carrascal","Edad": "24 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Diego Luis Valoyes Ruíz","Edad": "26 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Gustavo Cuéllar","Edad": "30 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "James Rodríguez","Edad": "31 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Jhon Arias","Edad": "25 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Luis Díaz","Edad": "26 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Mateus Uribe","Edad": "31 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Kevin Duvan Castaño Gil","Edad": "22 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Jefferson Lerma","Edad": "28 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Juan Fernando Quintero","Edad": "30 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre", "Dylan Felipe Borrero Caicedo","Edad": "21 años", "Posicion": "Centrocampista", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Juan David Mosquera López," "Edad": "20 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Radamel Falcao," "Edad": "37 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Duván Zapata," "Edad": "31 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jhon Durán," "Edad": "19 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Jhon Córdoba," "Edad": "29 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]},
+{"Nombre": "Rafael Santos Borré," "Edad": "27 años", "Posicion": "Delantero", "Equipo": [ObjectId("6417c8d4b506a4ac78a7698a")]}
+*/
+
+
